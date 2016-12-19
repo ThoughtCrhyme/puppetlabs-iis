@@ -1,18 +1,23 @@
----
 HOSTS:
-  windows2012-64-1:
-    pe_dir:
-    pe_ver:
-    pe_upgrade_dir:
-    pe_upgrade_ver:
-    hypervisor: vmpooler
-    platform: windows-2012-64
-    ruby_arch: x64
-    template: win-2012-x86_64
+  centos-7-x86_64-master:
     roles:
-    - agent
-    - default
+      - master
+      - dashboard
+      - database
+      - agent
+    platform: el-7-x86_64
+    template: Delivery/Quality Assurance/Templates/vCloud/centos-7-x86_64
+    hypervisor: vcloud
+  win-2012r2-x86_64-agent:
+    roles:
+      - agent
+    platform: windows-2012r2-x86_64
+    template: Delivery/Quality Assurance/Templates/vCloud/win-2012r2-x86_64
+    hypervisor: vcloud
 CONFIG:
   nfs_server: none
   consoleport: 443
+  datastore: instance0
+  folder: Delivery/Quality Assurance/Enterprise/Dynamic
+  resourcepool: delivery/Quality Assurance/Enterprise/Dynamic
   pooling_api: http://vmpooler.delivery.puppetlabs.net/

@@ -58,6 +58,7 @@ group :development do
   gem 'pry',                                :require => false
   gem 'json_pure', '<= 2.0.1',              :require => false if Gem::Version.new(RUBY_VERSION.dup) < Gem::Version.new('2.0.0')
   gem 'beaker-testmode_switcher'
+  gem 'rototiller', '=0.1.0',               :require => false
 end
 
 group :system_tests do
