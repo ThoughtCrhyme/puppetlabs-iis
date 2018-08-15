@@ -22,14 +22,27 @@ unless ENV['MODULE_provision'] == 'no'
   end
 end
 
+def windows_hosts
+  hosts.select { |host| host.platform =~ /windows/i }
+end
+
+def get_puppet_version
+  windows_hosts.first do | host |
+    on(host, powershell('puppet --version')) do | result |
+      require 'pry'; binding.pry;
+      result
+    end
+  end
+end
+
 RSpec.configure do |c|
   # Configure all nodes in nodeset
   c.before :suite do
     unless ENV['BEAKER_TESTMODE'] == 'local' || ENV['BEAKER_provision'] == 'no'
-      windows_hosts = hosts.select { |host| host.platform =~ /windows/i }
       install_module_from_forge_on(windows_hosts, 'puppetlabs/dism', '>= 1.2.0')
       pp = "dism { ['IIS-WebServerRole','IIS-WebServer', 'IIS-WebServerManagementTools']: ensure => present }"
       apply_manifest_on(windows_hosts, pp)
+      get_puppet_version
     end
   end
 end
