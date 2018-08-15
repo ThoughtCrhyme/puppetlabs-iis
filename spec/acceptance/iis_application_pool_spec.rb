@@ -99,7 +99,7 @@ describe 'iis_application_pool' do
             iis_application_pool { '#{@pool_name}':
               ensure    => 'present',
               user_name => 'user',
-              password  => Sensitive('password'),
+              password  => Sensitive('#@\\\'454sdf'),
             }
           HERE
         end
@@ -113,7 +113,7 @@ describe 'iis_application_pool' do
 
           puppet_resource_should_show('ensure', 'present')
           puppet_resource_should_show('user_name', 'user')
-          puppet_resource_should_show('password', 'password')
+          puppet_resource_should_show('password', '#@\'454sdf')
 
         after(:all) do
           remove_app_pool(@pool_name)
