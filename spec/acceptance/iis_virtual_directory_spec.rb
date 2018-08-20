@@ -70,7 +70,8 @@ describe 'iis_virtual_directory' do
 
         puppet_resource_should_show('ensure', 'present')
         puppet_resource_should_show('user_name', 'user')
-        puppet_resource_should_show('password', '#@\'454sdf')
+        puppet_resource_should_show('password', '#@\\\'454sdf')
+
       end
 
       after(:all) do

@@ -113,7 +113,7 @@ describe 'iis_application_pool' do
 
           puppet_resource_should_show('ensure', 'present')
           puppet_resource_should_show('user_name', 'user')
-          puppet_resource_should_show('password', '#@\'454sdf')
+          puppet_resource_should_show('password', '#@\\\'454sdf')
 
         after(:all) do
           remove_app_pool(@pool_name)
