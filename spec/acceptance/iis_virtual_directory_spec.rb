@@ -17,7 +17,7 @@ describe 'iis_virtual_directory' do
     context 'with default parameters' do
       before(:all) do
         @virt_dir_name = "#{SecureRandom.hex(10)}"
-        @manifest  = <<-HERE
+        @manifest = <<-HERE
           file{ 'c:/foo':
             ensure => 'directory'
           }->
@@ -45,9 +45,14 @@ describe 'iis_virtual_directory' do
     end
 
     context 'with a password wrapped in Sensitive()' do
-      before(:all) do
-        @virt_dir_name = "#{SecureRandom.hex(10)}"
-        @manifest  = <<-HERE
+      if (get_puppet_version.to_i < 5)
+        it 'is skipped due to version being lower than puppet 5' do
+          skip
+        end
+      else
+        before(:all) do
+          @virt_dir_name = "#{SecureRandom.hex(10)}"
+          @manifest = <<-HERE
           file{ 'c:/foo':
             ensure => 'directory'
           }->
@@ -58,23 +63,24 @@ describe 'iis_virtual_directory' do
             user_name    => 'user',
             password     => Sensitive('#@\\\'454sdf'),
           }
-        HERE
-      end
-
-      it_behaves_like 'an idempotent resource'
-
-      context 'when puppet resource is run' do
-        before(:all) do
-          @result = resource('iis_virtual_directory', @virt_dir_name)
+          HERE
         end
 
-        puppet_resource_should_show('ensure', 'present')
-        puppet_resource_should_show('user_name', 'user')
-        puppet_resource_should_show('password', '#@\'454sdf')
-      end
+        it_behaves_like 'an idempotent resource'
 
-      after(:all) do
-        remove_vdir(@virt_dir_name)
+        context 'when puppet resource is run' do
+          before(:all) do
+            @result = resource('iis_virtual_directory', @virt_dir_name)
+          end
+
+          puppet_resource_should_show('ensure', 'present')
+          puppet_resource_should_show('user_name', 'user')
+          puppet_resource_should_show('password', '#@\\\'454sdf')
+        end
+
+        after(:all) do
+          remove_vdir(@virt_dir_name)
+        end
       end
     end
 
@@ -83,7 +89,7 @@ describe 'iis_virtual_directory' do
         @virt_dir_name = "#{SecureRandom.hex(10)}"
         create_path('c:/foo')
         create_vdir(@virt_dir_name, 'foo', 'c:/foo')
-        @manifest  = <<-HERE
+        @manifest = <<-HERE
           iis_virtual_directory { '#{@virt_dir_name}':
             ensure       => 'absent'
           }
@@ -104,7 +110,7 @@ describe 'iis_virtual_directory' do
         remove_vdir(@virt_dir_name)
       end
     end
-    
+
     context 'name allows slashes' do
       context 'simple case' do
         before(:all) do
@@ -113,7 +119,7 @@ describe 'iis_virtual_directory' do
           create_path('c:\inetpub\test_vdir')
           create_path('c:\inetpub\deeper')
           create_site(@site_name, true)
-          @manifest  = <<-HERE
+          @manifest = <<-HERE
           iis_virtual_directory{ "test_vdir":
             ensure       => 'present',
             sitename     => "#{@site_name}",
@@ -127,7 +133,7 @@ describe 'iis_virtual_directory' do
           }
           HERE
         end
-        
+
         it_behaves_like 'an idempotent resource'
 
         after(:all) do
@@ -140,7 +146,7 @@ describe 'iis_virtual_directory' do
       context 'physicalpath parameter defined' do
         before(:all) do
           @virt_dir_name = "#{SecureRandom.hex(10)}"
-          @manifest  = <<-HERE
+          @manifest = <<-HERE
           iis_virtual_directory { '#{@virt_dir_name}':
             ensure       => 'present',
             sitename     => '#{@site_name}',
@@ -167,7 +173,7 @@ describe 'iis_virtual_directory' do
       context 'physicalpath parameter not defined' do
         before(:all) do
           @virt_dir_name = "#{SecureRandom.hex(10)}"
-          @manifest  = <<-HERE
+          @manifest = <<-HERE
           iis_virtual_directory { '#{@virt_dir_name}':
             ensure       => 'present',
             sitename     => '#{@site_name}'
