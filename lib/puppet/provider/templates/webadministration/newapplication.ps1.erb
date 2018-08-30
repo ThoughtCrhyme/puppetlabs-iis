@@ -1,5 +1,5 @@
 $resource = @{
-  name            = '<%= "#{resource[:applicationname]}" %>'
+  name            = '<%= "#{resource.provider.app_name}" %>'
   site            = '<%= "#{resource[:sitename]}" %>'
   physicalpath    = '<%= "#{resource[:physicalpath]}" %>'
   applicationpool = '<%= "#{resource[:applicationpool]}" %>'
