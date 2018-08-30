@@ -4,19 +4,6 @@ describe 'iis_application' do
   subject do
     Puppet::Type.type(:iis_application).new(params)
   end
-  context 'specifying compound title' do
-    let(:params) do
-      { title: 'foo\bar' }
-    end
-    it { expect(subject[:sitename]).to eq 'foo' }
-    it { expect(subject[:applicationname]).to eq 'bar' }
-  end
-  context 'specifying title without sitename' do
-    let(:params) do
-      { title: 'bar' }
-    end
-    it { expect{subject}.to raise_error(Puppet::Error, /sitename/) }
-  end
   context 'specifying title with sitename' do
     let(:params) do
       {
