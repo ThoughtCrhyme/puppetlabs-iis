@@ -35,7 +35,6 @@ describe 'iis_application' do
         end
 
         include_context 'with a puppet resource run'
-        puppet_resource_should_show('sitename', @site_name)
         puppet_resource_should_show('physicalpath', 'C:\inetpub\basic')
         puppet_resource_should_show('applicationpool', 'DefaultAppPool')
       end
@@ -70,7 +69,6 @@ describe 'iis_application' do
         end
 
         include_context 'with a puppet resource run'
-        puppet_resource_should_show('sitename', @site_name)
         puppet_resource_should_show('physicalpath', 'C:\inetpub\vdir')
         puppet_resource_should_show('applicationpool', 'DefaultAppPool')
       end
@@ -102,7 +100,6 @@ describe 'iis_application' do
       describe "application validation" do
         it "should create the correct application" do
           @result = on(default, puppet('resource', 'iis_application', "#{@site_name}\\\\subFolder/#{@app_name}"))
-          expect(@result.stdout).to match(/(sitename)(\s*)(=>)(\s*)('#{@site_name}'),/)
           expect(@result.stdout).to match(/iis_application { '#{@site_name}\\subFolder\/#{@app_name}':/)
           expect(@result.stdout).to match(/ensure\s*=> 'present',/)
         end
@@ -134,7 +131,6 @@ describe 'iis_application' do
       describe "application validation" do
         it "should create the correct application" do
           @result = on(default, puppet('resource', 'iis_application', "#{@site_name}\\\\subFolder/#{@app_name}"))
-          expect(@result.stdout).to match(/(sitename)(\s*)(=>)(\s*)('#{@site_name}'),/)
           expect(@result.stdout).to match(/iis_application { '#{@site_name}\\subFolder\/#{@app_name}':/)
           expect(@result.stdout).to match(/ensure\s*=> 'present',/)
         end
@@ -165,7 +161,8 @@ describe 'iis_application' do
 
         # a lading slash in applicationname causes the name matching to fail and runs
         # loses idempotency. A validation rule was added to prevent this.
-        it_behaves_like 'a failing manifest'
+        # it_behaves_like 'a failing manifest'
+        it_behaves_like 'an idempotent resource'
 
         after(:all) do
           remove_app(@app_name)
@@ -195,7 +192,6 @@ describe 'iis_application' do
       describe "application validation" do
         it "should create the correct application" do
           @result = on(default, puppet('resource', 'iis_application', "#{@site_name}\\\\subFolder/sub2/#{@app_name}"))
-          expect(@result.stdout).to match(/(sitename)(\s*)(=>)(\s*)('#{@site_name}'),/)
           expect(@result.stdout).to match(/iis_application { '#{@site_name}\\subFolder\/sub2\/#{@app_name}':/)
           expect(@result.stdout).to match(/ensure\s*=> 'present',/)
         end
