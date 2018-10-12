@@ -399,17 +399,15 @@ describe 'iis_application' do
     it 'contains two sites with the same app name' do
       on(default, puppet('resource', 'iis_application', "#{@site_name}\\\\#{@app_name}")) do |result|
         expect(result.stdout).to match(/#{@site_name}\\#{@app_name}/)
-        expect(result.stdout).to match(/present/)
+        expect(result.stdout).to match(/ensure\s*=> 'present',/)
         expect(result.stdout).to match (/C:\\inetpub\\#{@site_name}\\#{@app_name}/)
-        expect(result.stdout).to match (/applicationpool/)
-        expect(result.stdout).to match (/DefaultAppPool/)
+        expect(result.stdout).to match (/applicationpool\s*=> 'DefaultAppPool'/)
       end
       on(default, puppet('resource', 'iis_application', "#{@site_name2}\\\\#{@app_name}")) do |result|
         expect(result.stdout).to match(/#{@site_name2}\\#{@app_name}/)
-        expect(result.stdout).to match(/present/)
+        expect(result.stdout).to match(/ensure\s*=> 'present',/)
         expect(result.stdout).to match (/C:\\inetpub\\#{@site_name2}\\#{@app_name}/)
-        expect(result.stdout).to match (/applicationpool/)
-        expect(result.stdout).to match (/DefaultAppPool/)
+        expect(result.stdout).to match (/applicationpool\s*=> 'DefaultAppPool'/)
       end
     end
 

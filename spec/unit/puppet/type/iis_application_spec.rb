@@ -34,7 +34,7 @@ describe 'iis_application' do
     end
     it { expect(subject[:virtual_directory]).to eq 'IIS:\Sites\foo\bar' }
   end
-  context 'specifying virtua_directory with no provider path' do
+  context 'specifying virtual_directory with no provider path' do
     let(:params) do
       {
         title: 'foo\bar',
